@@ -6,6 +6,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Models\User;
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\SubCategoryController;
+use App\Http\Controllers\Backend\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -78,8 +82,64 @@ Route::post('/update/change/password' , [IndexController::class , 'UpdateChangeP
     ->name('user.password.update');
 
 
-
 // end user  section
 
+//Admin  Brand Start Routing
+Route::prefix('brand')->group(function(){
+Route::get('/view', [BrandController::class ,'BrandView'])->name('all.brand');
+Route::post('/store', [BrandController::class ,'BrandStore'])->name('brand.store');
 
+Route::get('/edit/{id}', [BrandController::class ,'BrandEdit'])->name('brand.edit');
 
+Route::post('/update/{id}', [BrandController::class ,'BrandUpdate'])->name('brand.update');
+Route::get('/delete/{id}', [BrandController::class ,'BrandDelete'])
+    ->name('brand.delete');
+
+});
+// Brand End Routing
+
+//Admin  Category Start Routing
+Route::prefix('category')->group(function(){
+    Route::get('/view', [CategoryController::class ,'CategoryView'])->name('all.category');
+    Route::post('/store', [CategoryController::class ,'CategoryStore'])->name('category.store');
+
+    Route::get('/edit/{id}', [CategoryController::class ,'CategoryEdit'])->name('category.edit');
+
+    Route::post('/update/{id}', [CategoryController::class ,'CategoryUpdate'])->name('category.update');
+    Route::get('/delete/{id}', [CategoryController::class ,'CategoryDelete'])->name('category.delete');
+
+    Route::get('/subcategory/ajax/{category_id}', [SubCategoryController::class,
+        'GetSubCategory']);
+
+    // Admin Sub Category All Routes
+    Route::prefix('sub')->group(function (){
+        Route::get('/view', [SubCategoryController::class ,'SubCategoryView'])->name('all.sub.category');
+        Route::post('/store', [SubCategoryController::class ,'SubCategoryStore'])->name('subcategory.store');
+
+        Route::get('/edit/{id}', [SubCategoryController::class ,'SubCategoryEdit'])->name('subcategory.edit');
+
+        Route::post('/update', [SubCategoryController::class ,'SubCategoryUpdate'])->name('subcategory.update');
+        Route::get('/delete/{id}', [SubCategoryController::class ,'SubCategoryDelete'])->name('subcategory.delete');
+
+        //
+        Route::prefix('sub')->group(function () {
+           Route::get('/view', [SubCategoryController::class ,'SubSubCategoryView'])->name('all.subsubcategory');
+
+            Route::post('/store', [SubCategoryController::class ,'SubSubCategoryStore'])->name('subsubcategory.store');
+
+            Route::get('/edit/{id}', [SubCategoryController::class ,'SubSubCategoryEdit'])->name('subsubcategory.edit');
+
+            Route::post('/update', [SubCategoryController::class ,'SubSubCategoryUpdate'])->name('subsubcategory.update');
+            Route::get('/delete/{id}', [SubCategoryController::class ,'SubSubCategoryDelete'])->name('subsubcategory.delete');
+
+        });
+    });
+    // Admin End Sub Category All Routes
+});
+// Category End Routing
+
+// Product Routing
+Route::prefix('product')->group(function () {
+    Route::get('/add', [ProductController::class, 'AddProduct'])->name('all-product');
+});
+// Product Routing
