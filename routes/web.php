@@ -10,6 +10,8 @@ use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\Frontend\LanguageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,28 +32,36 @@ Route::group(['prefix' => 'admin' ,'middleware' => ['admin:admin']], function ()
    Route::post('/login' , [AdminController::class , 'store'])->name('admin.login');
 });
 
-Route::middleware(['auth:sanctum,admin', 'verified'])->get('/admin/dashboard',
-    function () {
-    return view('admin.index');
-})->name('dashboard');
-/// Admin all Route
-Route::get('/admin/logout' , [AdminController::class , 'destroy'])
-    ->name('admin.logout');
+Route::middleware(['auth:admin'])->group(function () {
 
-Route::get('/admin/profile' , [AdminProfileController::class , 'AdminProfile'])
-    ->name('admin.profile');
+    Route::middleware(['auth:sanctum,admin', 'verified'])->get('/admin/dashboard',
+        function () {
+            return view('admin.index');
+        })->name('dashboard')->middleware('auth:admin');
 
-Route::get('/admin/profile/edit' , [AdminProfileController::class , 'AdminProfileEdit'])
-    ->name('admin.profile.edit');
 
-Route::post('/admin/profile/store' , [AdminProfileController::class , 'AdminProfileStore'])
-    ->name('admin.profile.store');
+    /// Admin all Route
+    Route::get('/admin/logout' , [AdminController::class , 'destroy'])
+        ->name('admin.logout');
 
-Route::get('/admin/change/password' , [AdminProfileController::class , 'AdminChangePassword'])
-    ->name('admin.change.password');
+    Route::get('/admin/profile' , [AdminProfileController::class , 'AdminProfile'])
+        ->name('admin.profile');
 
-Route::post('/update/change/password' , [AdminProfileController::class , 'AdminUpdateChangePassword'])
-    ->name('update.change.password');
+    Route::get('/admin/profile/edit' , [AdminProfileController::class , 'AdminProfileEdit'])
+        ->name('admin.profile.edit');
+
+    Route::post('/admin/profile/store' , [AdminProfileController::class , 'AdminProfileStore'])
+        ->name('admin.profile.store');
+
+    Route::get('/admin/change/password' , [AdminProfileController::class , 'AdminChangePassword'])
+        ->name('admin.change.password');
+
+    Route::post('/update/change/password' , [AdminProfileController::class , 'AdminUpdateChangePassword'])
+        ->name('update.change.password');
+
+});
+
+
 
 //A End Admin section#####################
 
@@ -111,6 +121,11 @@ Route::prefix('category')->group(function(){
     Route::get('/subcategory/ajax/{category_id}', [SubCategoryController::class,
         'GetSubCategory']);
 
+    Route::get('/sub-subcategory/ajax/{subcategory_id}', [SubCategoryController::class,
+        'GetSubSubCategory']);
+
+
+
     // Admin Sub Category All Routes
     Route::prefix('sub')->group(function (){
         Route::get('/view', [SubCategoryController::class ,'SubCategoryView'])->name('all.sub.category');
@@ -141,5 +156,54 @@ Route::prefix('category')->group(function(){
 // Product Routing
 Route::prefix('product')->group(function () {
     Route::get('/add', [ProductController::class, 'AddProduct'])->name('all-product');
+    Route::post('/store' ,[ProductController::class , 'StoreProduct'])->name('product-store');
+    Route::get('/manage',[ProductController::class,'ManageProduct'])->name('manage-product');
+
+    Route::get('/edit/{id}', [ProductController::class ,'ProductEdit'])->name('product-edit');
+
+    Route::post('/update/{id}', [ProductController::class ,'ProductUpdate'])->name('product-update');
+
+    Route::post('/image/update', [ProductController::class ,'MultiImageUpdate'])->name('update-product-image');
+
+     Route::post('/thambnaail/update', [ProductController::class ,'ThambImageUpdate'])->name('update-product-thambnail');
+
+     Route::post('/multiimg/delete/{id}', [ProductController::class ,'multiimgDelete'])->name('product.multiimg.delete');
+
+     Route::get('/inactive/{id}', [ProductController::class ,'ProductInactive'])->name('product-inactive');
+     Route::get('/active/{id}', [ProductController::class ,'ProductActive'])->name('product-active');
+
+    Route::get('/delete/{id}', [ProductController::class ,'ProducDtelete'])->name('product-delete');
+
 });
 // Product Routing
+
+// slider Start Routing
+
+
+ Route::prefix('slider')->group(function(){
+     Route::get('/view', [SliderController::class ,'SliderView'])->name('manage-slider');
+     Route::post('/store', [SliderController::class ,'SliderStore'])->name('slider-store');
+//
+     Route::get('/edit/{id}', [SliderController::class ,'SliderEdit'])->name('slider-edit');
+//
+     Route::post('/update', [SliderController::class ,'SliderUpdate'])->name('slider-update');
+     Route::get('/delete/{id}', [ SliderController::class ,'SliderDelete'])->name('slider-delete');
+
+     Route::get('/inactive/{id}', [SliderController::class ,'SliderInactive'])->name('slider-inactive');
+     Route::get('/active/{id}', [SliderController::class ,'SliderActive'])->name('slider-active');
+//
+//     Route::get('/delete/{id}', [SliderController::class ,'SliderDtelete'])->name('slider-delete');
+ });
+// slider Start Routing
+
+/// FRont End All Route //
+/// Multi Language All Route
+
+Route::prefix('language')->group(function () {
+Route::get('/english', [LanguageController::class, 'English'])->name('english.lang');
+Route::get('/arabic', [LanguageController::class, 'Arabic'])->name('arabic.lang');
+
+});
+
+
+

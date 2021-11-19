@@ -317,6 +317,12 @@
 <script src="{{asset('../assets/vendor_components/datatable/datatables.min.js')}}"></script>
 <script src="{{asset('backend/js/pages/data-table.js')}}"></script>
 
+// Inpt Tags Script
+<script src="{{asset('../assets/vendor_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js')}}"></script>
+// Long Description Ck Editor
+
+<script src="{{asset('../assets/vendor_components/ckeditor/ckeditor.js')}}"></script>	<script src="../assets/vendor_components/ckeditor/ckeditor.js"></script>
+<script src="{{asset('../assets/vendor_plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js')}}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js">
 </script>
