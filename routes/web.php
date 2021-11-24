@@ -12,6 +12,11 @@ use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Frontend\LanguageController;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\User\WishlistController;
+use App\Http\Controllers\User\CartPageController;
+use App\Http\Controllers\Backend\CouponController;
+use App\Http\Controllers\Backend\ShippingAreaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -204,6 +209,128 @@ Route::get('/english', [LanguageController::class, 'English'])->name('english.la
 Route::get('/arabic', [LanguageController::class, 'Arabic'])->name('arabic.lang');
 
 });
+
+Route::prefix('product')->group(function () {
+
+    Route::get('/details/{id}/{slug}' , [IndexController::class, 'ProductDetails']);
+
+    Route::get('/tags/{tag}' , [IndexController::class, 'TagWiseProduct']);
+
+});
+
+Route::get('subcategory/product/{subcat_id}/{slug}' ,
+    [IndexController::class, 'SubCatWiseProduct']);
+
+Route::get('subsubcategory/product/{subsubcat_id}/{slug}',
+    [IndexController::class, 'SubSubCatWiseProduct']);
+
+///product/view/modal/'+id
+
+Route::get('product/view/modal/{id}', [IndexController::class ,'ProductViewAjax']);
+
+Route::get('/product/mini/cart',[CartController::class , 'AddMiniCart']);
+
+Route::post('/cart/data/store/{id}',[CartController::class, 'AddToCart']);
+
+
+Route::get('/minicart/product-remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
+
+Route::post('/add-to-wishlist/{product_id}', [CartController::class, 'AddToWishList']);
+
+
+
+Route::group(['prefix'=>'user','middleware' => ['user','auth'],'namespace'=>'User'],function(){
+
+    Route::get('/wishlist', [WishlistController::class, 'ViewWishlist'])->name('wishlist');
+
+    Route::get('/get-wishlist-product', [WishlistController::class, 'GetWishlistProduct']);
+
+    Route::get('/wishlist-remove/{id}', [WishlistController::class, 'RemoveWishlistProduct']);
+
+});
+
+
+Route::prefix('user')->group(function () {
+
+    Route::get('/mycart',[CartPageController::class,'MyCart'])->name('mycart');
+
+    Route::get('/get-cart-product', [CartPageController::class, 'GetCartProduct']);
+
+    Route::get('/cart-remove/{rowId}', [CartPageController::class, 'RemoveCartProduct']);
+
+    Route::get('/cart-increment/{rowId}', [CartPageController::class, 'CartIncrement']);
+
+    Route::get('/cart-decrement/{rowId}', [CartPageController::class, 'CartDecrement']);
+
+});
+
+
+Route::prefix('coupons')->group(function () {
+
+Route::get('/view', [CouponController::class , 'CouponView'])->name('manage-coupon');
+    Route::post('/store', [CouponController::class ,'CouponStore'])->name('coupon.store');
+
+    Route::get('/edit/{id}', [CouponController::class ,'CouponEdit'])->name('coupon.edit');
+
+    Route::post('/update/{id}', [CouponController::class ,'CouponUpdate'])->name('coupon.update');
+    Route::get('/delete/{id}', [CouponController::class ,'CouponDelete'])->name('coupon.delete');
+
+});
+
+
+Route::prefix('shipping')->group(function () {
+
+    Route::get('/division/view', [ShippingAreaController::class , 'DivsionView'])->name('manage-division');
+    Route::post('/store', [ShippingAreaController::class ,'DivisionStore'])->name('division.store');
+
+    Route::get('/edit/{id}', [ShippingAreaController::class ,'DivisionEdit'])->name('division.edit');
+
+    Route::post('/update/{id}', [ShippingAreaController::class ,'DivisionUpdate'])->name('division.update');
+    Route::get('/delete/{id}', [ShippingAreaController::class ,'DivisionDelete'])->name('division.delete');
+
+
+
+
+    Route::prefix('district')->group(function(){
+
+        Route::get('/view', [ShippingAreaController::class , 'DistrictView'])->name('manage-district');
+        Route::post('/store', [ShippingAreaController::class ,'DistrictStore'])->name('district.store');
+
+        Route::get('/edit/{id}', [ShippingAreaController::class ,'DistrictEdit'])->name('district.edit');
+
+        Route::post('/update/{id}', [ShippingAreaController::class ,'DistrictUpdate'])->name('district.update');
+        Route::get('/delete/{id}', [ShippingAreaController::class ,'DistrictDelete'])->name('district.delete');
+
+    });
+
+    Route::prefix('state')->group(function() {
+
+        Route::get('/view', [ShippingAreaController::class , 'StateView'])->name('manage-state');
+        Route::post('/store', [ShippingAreaController::class ,'StateStore'])->name('state.store');
+
+        Route::get('/edit/{id}', [ShippingAreaController::class ,'StateEdit'])->name('state.edit');
+
+        Route::post('/update/{id}', [ShippingAreaController::class ,'StateUpdate'])->name('state.update');
+        Route::get('/delete/{id}', [ShippingAreaController::class ,'StateDelete'])->name('state.delete');
+
+
+    });
+});
+
+
+Route::post('/coupon-apply',[CartController::class,'CouponApply']);
+
+Route::get('/coupon-calculation',[CartController::class, 'CouponCalculation']);
+
+Route::get('/coupon-remove',[CartController::class, 'CouponRemove']);
+
+
+
+
+
+
+
+
 
 
 

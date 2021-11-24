@@ -102,6 +102,45 @@
                 </ul>
             </li>
 
+
+            <li class="treeview" {{($prefix == '/coupons') ? 'active' : ''}}>
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Coupon </span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{($route == 'manage-coupon') ? 'active' : ''}}">
+                        <a href="{{route('manage-coupon')}}"><i class="ti-more"></i> Manage Coupon</a></li>
+
+
+                </ul>
+            </li>
+
+            <li class="treeview" {{($prefix == '/shipping') ? 'active' : ''}}>
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Shipping Area </span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{($route == 'manage-division') ? 'active' : ''}}">
+                        <a href="{{route('manage-division') ? 'active' : ''}}"><i class="ti-more"></i> Shipping Division</a></li>
+                       <li><a href="{{route('manage-district')? 'active' : ''}}"><i class="ti-more"></i> Shipping District</a></li>
+                    <li><a href="{{route('manage-state') ? 'active' : ''}}"><i class="ti-more"></i> Shipping State</a></li>
+
+
+                </ul>
+            </li>
+
+
+
+
+
             <li class="header nav-small-cap">User Interface</li>
 
             <li class="treeview">
